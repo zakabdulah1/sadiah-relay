@@ -54,7 +54,7 @@ export default {
   },
 };
 
-export class RelayTunnel {
+export class SadiahRelay {
   constructor(state, env) {
     this.state = state;
     this.env = env;
