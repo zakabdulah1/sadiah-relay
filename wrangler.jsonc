@@ -5,10 +5,7 @@
   "compatibility_date": "2026-10-11",
   "durable_objects": {
     "bindings": [
-      { "name": "RELAY_TUNNELS", "class_name": "RelayTunnel" }
+      { "name": "RELAY_TUNNELS", "class_name": "SadiahRelay" }
     ]
-  },
-  "migrations": [
-    { "tag": "v1", "new_sqlite_classes": ["RelayTunnel"] }
-  ]
+  }
 }
