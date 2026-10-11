@@ -1,30 +1,23 @@
-# Sadiah Public Relay — CP167 Render Ready
+# Sadiah Relay CP168 — Cloudflare Development Relay
 
-This repository is intentionally relay-only. It does not contain Sadiah Digital, the Sadiah Server Mini database, business data, or operator credentials.
+CP168 moves the CP167 relay behavior from Dart/Docker to Cloudflare Worker + Durable Object so the real cross-network pilot can proceed without Render.
 
-## Render deployment
+## Pilot path
 
-Create a Web Service with:
-- Runtime: Docker
-- Region: Singapore
-- Plan: Free (pilot/test)
-- Dockerfile: `./Dockerfile`
-- Docker context: `.`
+Sadiah Digital Owner/Operator -> HTTPS workers.dev -> Durable Object relay -> WebSocket -> OPPO Sadiah Server Mini -> /v2
 
-Required environment variable:
-- `SADIAH_TUNNELS_JSON` — JSON object mapping one Sadiah Server Mini ID to its long tunnel secret.
+## Endpoints
 
-Render supplies `PORT` automatically. The relay listens on that port.
+- GET /health
+- GET /tunnel/status?server_id=<server-id>
+- WSS /tunnel/connect?server_id=<server-id>&key=<relay-secret>
+- GET|POST /r/<server-id>/health
+- GET|POST /r/<server-id>/v2/*
 
-## Public endpoints
+## Development scope
 
-- `GET /health`
-- `WSS /tunnel/connect?server_id=<server-id>` (Server Mini only; Bearer tunnel secret required)
-- `GET|POST /r/<server-id>/health`
-- `GET|POST /r/<server-id>/v2/*`
-
-No `/v1` protocol is exposed. Business authorization remains enforced by Sadiah Server Mini `/v2` endpoints behind the tunnel.
-
-## Production boundary
-
-TLS is terminated by Render. The relay is deliberately thin and stateless: it forwards requests to the outbound WSS tunnel opened by the OPPO Server Mini. It is not the business database.
+- One OPPO pilot first.
+- Relay secret stays outside source.
+- Cloudflare stores no business database.
+- No /v1 production route.
+- Cross-network remains NOT PASS until the OPPO and Sadiah Digital are actually exercised on different networks.
